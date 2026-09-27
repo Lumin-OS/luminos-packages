@@ -1,0 +1,19 @@
+# Imports the key into pacman's keyring whenever there is one, as Arch's
+# archlinux-keyring does. On a system whose keyring isn't set up yet,
+# `pacman-key --populate` imports it later.
+
+populate_luminos() {
+	if usr/bin/pacman-key -l >/dev/null 2>&1; then
+		usr/bin/pacman-key --populate luminos
+	fi
+}
+
+post_upgrade() {
+	populate_luminos
+}
+
+post_install() {
+	if [ -x usr/bin/pacman-key ]; then
+		populate_luminos
+	fi
+}

@@ -5,7 +5,7 @@ Package sources for LuminOS's own packages, one folder per package.
 | Package | What it is |
 |---|---|
 | `luminos-base` | The base system every LuminOS install has, with or without a desktop, usable from the command line alone |
-| `luminos-keyring` | The key the repository is signed with (to come) |
+| `luminos-keyring` | The key the repository is signed with |
 | `luminos-desktop` | The Hyprland desktop on top of the base (to come) |
 | `luminos-dawn` | Dawn, the installer (comes with Dawn's M5) |
 
@@ -22,9 +22,13 @@ repository's key:
 
 ```sh
 cd luminos-base
-GPGKEY=<the repository key's fingerprint> makepkg --nodeps --sign
+GPGKEY=9CECC70BA1BC755E24211DADF89429CD92739788 makepkg --nodeps --sign
 ```
 
 The built packages go into
 [luminos-repository](https://github.com/Lumin-OS/luminos-repository)'s
 `x86_64/`, and its `dbupdate.sh` updates the database.
+
+The repository key (`9CECC70BA1BC755E24211DADF89429CD92739788`, "LuminOS")
+expires on 2029-09-26. `luminos-keyring/PKGBUILD` says what to do before
+then.
