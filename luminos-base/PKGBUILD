@@ -1,0 +1,44 @@
+# The LuminOS base system: what every install has, with or without a
+# desktop, usable from the command line alone. Dawn's online install
+# pacstraps it together with luminos-desktop, and the ISO is built from
+# both, so offline installs match online ones.
+
+pkgname=luminos-base
+pkgver=1
+pkgrel=1
+pkgdesc='LuminOS base system'
+arch=('any')
+url='https://github.com/Lumin-OS/luminos-packages'
+license=('GPL-3.0-or-later')
+depends=(
+  # Arch's base system, and the kernel with what builds its UKIs.
+  base linux linux-firmware mkinitcpio
+  # Microcode, which the UKIs get from mkinitcpio's microcode hook.
+  amd-ucode intel-ucode
+  # Dawn formats the root as btrfs, and mkinitcpio's fsck hook needs
+  # fsck.btrfs; without it, no UKIs get built.
+  btrfs-progs
+  # What Dawn sets up on the installed system: the network, sudo for the
+  # wheel group, and zram swap.
+  networkmanager sudo zram-generator
+  # Secure Boot: Dawn enrols keys with sbctl, and sbctl's pacman hook
+  # re-signs the boot loader and the UKIs after updates.
+  sbctl
+  # The key the repository is signed with.
+  luminos-keyring
+  # Sound on most recent laptops.
+  sof-firmware
+  # The command line: an editor and manual pages; filesystem tools for the
+  # FAT32 boot partition and for USB drives and other systems' disks;
+  # archives; and pacman's helpers, git and base-devel, for AUR packages.
+  nano man-db man-pages
+  dosfstools e2fsprogs exfatprogs ntfs-3g unzip zip
+  pacman-contrib git base-devel
+)
+backup=(etc/mkinitcpio.conf.d/luminos.conf)
+source=(luminos.conf)
+sha256sums=('e9de328d70f05440a8a2d1327d8b05043c01ed79eab9511536c6e6506852e7ab')
+
+package() {
+  install -Dm644 luminos.conf "$pkgdir/etc/mkinitcpio.conf.d/luminos.conf"
+}

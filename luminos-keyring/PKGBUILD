@@ -1,0 +1,24 @@
+# The key LuminOS's package repository is signed with, for pacman-key.
+# luminos-base depends on it, so every install trusts the repository. The
+# live ISO imports it at boot, and Dawn's offline cleanup runs
+# `pacman-key --populate archlinux luminos`.
+#
+# The key expires on 2029-09-26. Before then, extend it
+# (gpg --quick-set-expire), export luminos.gpg again and release a new
+# pkgver, or pacman starts rejecting the repository's signatures.
+
+pkgname=luminos-keyring
+pkgver=20260928
+pkgrel=1
+pkgdesc='LuminOS repository signing key'
+arch=('any')
+url='https://github.com/Lumin-OS/luminos-packages'
+license=('GPL-3.0-or-later')
+install=luminos-keyring.install
+source=(luminos.gpg luminos-trusted)
+sha256sums=('d074ed3768fec285383384de5074b41300fd37d23e6e61a1472d6f46613353b2'
+            'b70db16128c80bd138ca06eafd6177cbb625eae3193b9072eb002c3a3ed66675')
+
+package() {
+  install -Dm644 -t "$pkgdir/usr/share/pacman/keyrings/" luminos.gpg luminos-trusted
+}

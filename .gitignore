@@ -1,0 +1,6 @@
+# What makepkg leaves next to a PKGBUILD. Built packages go to
+# luminos-repository, never into this repository.
+src/
+pkg/
+*.pkg.tar.*
+*.log
