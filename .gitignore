@@ -4,3 +4,5 @@ src/
 pkg/
 *.pkg.tar.*
 *.log
+# makepkg's clones of git sources.
+luminos-desktop/dotfiles/
