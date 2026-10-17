@@ -1,0 +1,13 @@
+# greetd's configuration on LuminOS. greetd reads this file instead of
+# /etc/greetd/config.toml, which the greetd package owns: luminos-desktop's
+# /usr/lib/systemd/system/greetd.service.d/luminos.conf says so. When
+# autologin is chosen, Dawn, the installer, adds an [initial_session].
+
+[terminal]
+# The VT to run the login screen on.
+vt = 1
+
+[default_session]
+# regreet inside a Hyprland of its own.
+command = "/usr/bin/luminos-greeter"
+user = "greeter"

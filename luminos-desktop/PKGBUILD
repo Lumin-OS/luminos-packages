@@ -1,0 +1,89 @@
+# The LuminOS desktop on top of luminos-base: Hyprland with a Quickshell
+# bar, the greetd login screen (regreet inside Hyprland), apps, sound and
+# fonts, and every new user's default config in /etc/skel, from the
+# dotfiles repository. Dawn's online install pacstraps it together with
+# luminos-base, and the ISO is built from both.
+
+pkgname=luminos-desktop
+pkgver=1
+pkgrel=1
+pkgdesc='LuminOS Hyprland desktop'
+arch=('any')
+url='https://github.com/Lumin-OS/luminos-packages'
+license=('GPL-3.0-or-later')
+depends=(
+  luminos-base
+  # The desktop: Hyprland with its portals and polkit agent, and the shell.
+  hyprland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
+  hyprpolkitagent quickshell
+  # The login screen.
+  greetd greetd-regreet
+  # Apps: terminal, file manager (gvfs for drives and the trash),
+  # launcher, browser.
+  kitty thunar gvfs rofi firefox
+  # Lock screen, idle, wallpaper and screenshots.
+  hyprlock hypridle swaybg grim slurp wl-clipboard
+  # Wi-Fi and Bluetooth in the bar's tray.
+  network-manager-applet blueman
+  # Sound.
+  pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-jack
+  # What the bar's battery and the laptop keys use.
+  upower brightnessctl playerctl
+  # Desktop plumbing: Qt apps on Wayland, ~/Documents and friends,
+  # xdg-open, and the icon theme rofi uses.
+  qt6-wayland xdg-user-dirs xdg-utils adwaita-icon-theme
+  # Fonts, and the Nerd symbols the bar's icons come from.
+  noto-fonts noto-fonts-emoji ttf-jetbrains-mono
+  ttf-nerd-fonts-symbols ttf-nerd-fonts-symbols-mono
+)
+makedepends=(git)
+# Dawn edits both: autologin goes into luminos.toml, and the chosen
+# layout into the default keyboard.lua new users get.
+backup=(
+  etc/greetd/luminos.toml
+  etc/skel/.config/hypr/keyboard.lua
+)
+source=(
+  "dotfiles::git+https://github.com/Lumin-OS/dotfiles.git#commit=530f8ca89d29c5b746797243a059477a37859973"
+  luminos.toml greetd-luminos.conf
+  luminos-greeter greeter-hyprland.lua regreet.toml regreet.css
+  default.png
+)
+sha256sums=('4bd1254ed2632567ff5bd2d3871d3b8468329d56d70cdeffaa215a2dbaa19370'
+            '5f6bdaf5c38e5e0e0112e5035ea37cee11734da453006b06b363cd3153d7a31a'
+            '0bfee1e8b134392b29788745702389f9a43aecb42887ac7018c9350cbec471e6'
+            '29e89b4c8b0a6c6feb1a5a7d8e7168d3111f14da6e81378b9b256253e4312f62'
+            'df0656b7670f8630741d2d3d0387c2a515e95df44f97aea062928363dcb13053'
+            '2e2b9924f7a3ab7ca7046619319be3703bfd0de57725152d6ffef3d1fd70c7a1'
+            '0ffc335459701c1a6077baaf040ec329be40ad5d21f3944ec4318551b8f44b28'
+            '10b3d353ae08609934bffe414f5c790396e75585c517798e4bc71330747f060a')
+
+package() {
+  # Every new user's default config: the dotfiles' .config, without the
+  # rofi theme's README and screenshot.
+  cd dotfiles
+  local file
+  while IFS= read -r -d '' file; do
+    install -Dm644 "$file" "$pkgdir/etc/skel/$file"
+  done < <(find .config -type f ! -name README.md ! -name 'Screenshot*.png' -print0)
+  cd "$srcdir"
+
+  # The login screen. Dawn enables greetd on the installed system; the
+  # live ISO logs its user in on tty1 instead.
+  install -Dm644 luminos.toml "$pkgdir/etc/greetd/luminos.toml"
+  install -Dm644 greetd-luminos.conf \
+    "$pkgdir/usr/lib/systemd/system/greetd.service.d/luminos.conf"
+  install -Dm755 luminos-greeter "$pkgdir/usr/bin/luminos-greeter"
+  install -Dm644 greeter-hyprland.lua \
+    "$pkgdir/usr/share/luminos-desktop/greeter/hyprland.lua"
+  install -Dm644 -t "$pkgdir/usr/share/luminos-desktop/greeter/" regreet.toml regreet.css
+
+  install -Dm644 default.png "$pkgdir/usr/share/backgrounds/luminos/default.png"
+
+  # Bluetooth, enabled the way `systemctl enable bluetooth` would, but from
+  # /usr/lib: it starts once an adapter shows up, for the tray applet.
+  install -dm755 "$pkgdir/usr/lib/systemd/system/bluetooth.target.wants"
+  ln -s ../bluetooth.service \
+    "$pkgdir/usr/lib/systemd/system/bluetooth.target.wants/bluetooth.service"
+  ln -s bluetooth.service "$pkgdir/usr/lib/systemd/system/dbus-org.bluez.service"
+}
