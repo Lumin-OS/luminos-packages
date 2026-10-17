@@ -7,7 +7,7 @@ Package sources for LuminOS's own packages, one folder per package.
 | `luminos-base` | The base system every LuminOS install has, with or without a desktop, usable from the command line alone |
 | `luminos-keyring` | The key the repository is signed with |
 | `luminos-desktop` | The Hyprland desktop on top of the base: the Quickshell bar, the greetd login screen, apps and fonts, and every new user's config from [dotfiles](https://github.com/Lumin-OS/dotfiles) |
-| `luminos-dawn` | Dawn, the installer (comes with Dawn's M5) |
+| `luminos-dawn` | Dawn, the installer: GUI/backend, runtime branding and polkit integration |
 
 Dawn's online install pacstraps `luminos-base` and `luminos-desktop`, and the
 [LuminOS ISO](https://github.com/Lumin-OS/LuminOS) is built from the same
@@ -36,3 +36,15 @@ checksums git sources too.
 The repository key (`9CECC70BA1BC755E24211DADF89429CD92739788`, "LuminOS")
 expires on 2029-09-26. `luminos-keyring/PKGBUILD` says what to do before
 then.
+
+`luminos-dawn` builds Rust binaries, so its build machine needs Rust, git,
+fontconfig, libxcb, libxkbcommon and Wayland development libraries. The
+PKGBUILD fetches locked Cargo dependencies in prepare(), then builds with
+`--frozen`. It pins an immutable M5 source commit until a release tag exists.
+Run Dawn's checks before publishing; its package check() runs the workspace
+tests too. The default GUI backend is winit, independent of Qt on the host.
+
+M5 merge order: dotfiles and Dawn first, then these recipes, then the ISO
+integration. Merge this branch into main to include the desktop previously
+merged into base-and-keyring. Sign and publish all four packages together
+before distributing the ISO; no publication happens from these recipes.

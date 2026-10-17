@@ -6,7 +6,7 @@
 
 pkgname=luminos-desktop
 pkgver=1
-pkgrel=1
+pkgrel=2
 pkgdesc='LuminOS Hyprland desktop'
 arch=('any')
 url='https://github.com/Lumin-OS/luminos-packages'
@@ -44,12 +44,12 @@ backup=(
   etc/skel/.config/hypr/keyboard.lua
 )
 source=(
-  "dotfiles::git+https://github.com/Lumin-OS/dotfiles.git#commit=530f8ca89d29c5b746797243a059477a37859973"
+  "dotfiles::git+https://github.com/Lumin-OS/dotfiles.git#commit=b6b2c21a565cbc92ffa01ffbf118926b9ab46811"
   luminos.toml greetd-luminos.conf
   luminos-greeter greeter-hyprland.lua regreet.toml regreet.css
   default.png
 )
-sha256sums=('4bd1254ed2632567ff5bd2d3871d3b8468329d56d70cdeffaa215a2dbaa19370'
+sha256sums=('f4bbf3383910c9e7f242d3b6e6278935cd77a1d0a2e3c3ab5bfa46e115f84c4a'
             '5f6bdaf5c38e5e0e0112e5035ea37cee11734da453006b06b363cd3153d7a31a'
             '0bfee1e8b134392b29788745702389f9a43aecb42887ac7018c9350cbec471e6'
             '29e89b4c8b0a6c6feb1a5a7d8e7168d3111f14da6e81378b9b256253e4312f62'
