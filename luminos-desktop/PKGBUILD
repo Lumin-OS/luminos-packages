@@ -6,12 +6,15 @@
 
 pkgname=luminos-desktop
 pkgver=1
-pkgrel=2
+pkgrel=3
 pkgdesc='LuminOS Hyprland desktop'
 arch=('any')
 url='https://github.com/Lumin-OS/luminos-packages'
 license=('GPL-3.0-or-later')
 depends=(
+  # Resolve JACK before Firefox/FFmpeg's virtual jack dependency can pick
+  # jack2. This order matters when pacstrapping only the meta-packages.
+  pipewire-jack
   luminos-base
   # The desktop: Hyprland with its portals and polkit agent, and the shell.
   hyprland xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
@@ -26,7 +29,7 @@ depends=(
   # Wi-Fi and Bluetooth in the bar's tray.
   network-manager-applet blueman
   # Sound.
-  pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-jack
+  pipewire wireplumber pipewire-pulse pipewire-alsa
   # What the bar's battery and the laptop keys use.
   upower brightnessctl playerctl
   # Desktop plumbing: Qt apps on Wayland, ~/Documents and friends,
