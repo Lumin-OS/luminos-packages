@@ -1,0 +1,10 @@
+/* The login screen's colours: Rosé Pine, like the desktop. */
+
+window {
+    background-color: #191724;
+}
+
+button.suggested-action {
+    background: #9ccfd8;
+    color: #191724;
+}

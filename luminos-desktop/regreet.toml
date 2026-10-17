@@ -1,0 +1,17 @@
+# regreet, the login screen, as luminos-greeter starts it.
+# https://github.com/rharish101/ReGreet
+
+[background]
+path = "/usr/share/backgrounds/luminos/default.png"
+fit = "Cover"
+
+[GTK]
+application_prefer_dark_theme = true
+font_name = "Noto Sans 12"
+
+[commands]
+reboot = ["systemctl", "reboot"]
+poweroff = ["systemctl", "poweroff"]
+
+[appearance]
+greeting_msg = "Welcome to LuminOS"

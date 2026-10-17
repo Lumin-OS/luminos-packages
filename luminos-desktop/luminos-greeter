@@ -1,0 +1,4 @@
+#!/bin/sh
+# The login screen greetd starts on LuminOS (/etc/greetd/luminos.toml):
+# regreet inside a Hyprland of its own, with the config below.
+exec dbus-run-session start-hyprland -- -c /usr/share/luminos-desktop/greeter/hyprland.lua
