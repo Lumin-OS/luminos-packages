@@ -1,0 +1,56 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Pinned source: building the package never follows a moving branch.
+pkgname=luminos-dawn
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Dawn, the LuminOS graphical installer'
+arch=('x86_64')
+url='https://github.com/Lumin-OS/dawn'
+license=('GPL-3.0-or-later')
+depends=(
+  arch-install-scripts btrfs-progs dosfstools parted squashfs-tools
+  mkinitcpio sbctl polkit networkmanager curl pacman systemd shadow util-linux
+  xkeyboard-config tzdata fontconfig libxkbcommon wayland libxcb libglvnd
+  libx11 gcc-libs glibc
+)
+makedepends=(rust git)
+backup=('etc/dawn/installer.toml')
+options=('!lto')
+_commit=8955c090c3dfb8999a5771ef1f46cfea84a2e673
+source=("dawn::git+https://github.com/Lumin-OS/dawn.git#commit=$_commit" luminos-dawn.desktop)
+sha256sums=('SKIP' 'ab5c2af804fa7009c07e9cf7067ea7f58dc19cb19136b68964df613051de5917')
+
+prepare() {
+  cd dawn
+  cargo fetch --locked
+}
+
+build() {
+  cd dawn
+  cargo build --release --frozen -p backend -p frontend --bins
+}
+
+check() {
+  cd dawn
+  cargo test --frozen --workspace
+}
+
+package() {
+  cd dawn
+  install -Dm755 target/release/dawn "$pkgdir/usr/bin/dawn"
+  install -Dm755 target/release/dawn-backend "$pkgdir/usr/bin/dawn-backend"
+  install -Dm644 config/installer.toml "$pkgdir/etc/dawn/installer.toml"
+  install -Dm644 config/polkit/org.luminos.dawn.policy \
+    "$pkgdir/usr/share/polkit-1/actions/org.luminos.dawn.policy"
+  # The live-user exemption belongs to the installer and disappears with
+  # it after an offline installation.
+  install -Dm644 config/polkit/50-luminos-dawn.rules \
+    "$pkgdir/usr/share/polkit-1/rules.d/50-luminos-dawn.rules"
+  local file
+  while IFS= read -r -d '' file; do
+    install -Dm644 "$file" "$pkgdir/usr/share/dawn/$file"
+  done < <(find branding/luminos -type f -print0)
+  install -Dm644 "$srcdir/luminos-dawn.desktop" \
+    "$pkgdir/usr/share/applications/luminos-dawn.desktop"
+  install -Dm644 branding/luminos/icon.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/luminos-dawn.svg"
+}

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Install LuminOS
+Comment=Install LuminOS onto a disk
+Exec=dawn
+Icon=luminos-dawn
+Terminal=false
+Categories=System;
+StartupWMClass=luminos-dawn
