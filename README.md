@@ -48,3 +48,10 @@ M5 merge order: dotfiles and Dawn first, then these recipes, then the ISO
 integration. Merge this branch into main to include the desktop previously
 merged into base-and-keyring. Sign and publish all four packages together
 before distributing the ISO; no publication happens from these recipes.
+
+Build release binaries in the official Arch environment used by the ISO CI.
+`luminos-dawn` explicitly targets baseline x86-64 for Rust and C/C++ code;
+native CPU optimizations from a developer's makepkg configuration must not
+leak into distributed packages. The previous 0.1.0-1 build from a native
+optimized host crashes on other CPUs; distribute 0.1.0-2 or newer. The ISO
+workflow uploads unsigned package artifacts for the user's signing step.
