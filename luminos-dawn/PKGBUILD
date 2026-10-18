@@ -2,7 +2,7 @@
 # Pinned source: building the package never follows a moving branch.
 pkgname=luminos-dawn
 pkgver=0.1.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Dawn, the LuminOS graphical installer'
 arch=('x86_64')
 url='https://github.com/Lumin-OS/dawn'
@@ -16,7 +16,7 @@ depends=(
 makedepends=(rust git)
 backup=('etc/dawn/installer.toml')
 options=('!lto')
-_commit=8955c090c3dfb8999a5771ef1f46cfea84a2e673
+_commit=319bdad6770b284579776fbc00306fc2c1775fbb
 source=("dawn::git+https://github.com/Lumin-OS/dawn.git#commit=$_commit" luminos-dawn.desktop)
 sha256sums=('SKIP' 'ab5c2af804fa7009c07e9cf7067ea7f58dc19cb19136b68964df613051de5917')
 
