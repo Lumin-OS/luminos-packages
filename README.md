@@ -22,7 +22,7 @@ repository's key:
 
 ```sh
 cd luminos-base
-GPGKEY=9CECC70BA1BC755E24211DADF89429CD92739788 makepkg --nodeps --sign
+GPGKEY=547F4761802A0904A0B10E5FAE527343BC3E39B3 makepkg --nodeps --sign
 ```
 
 The built packages go into
@@ -33,8 +33,8 @@ The built packages go into
 ship newer dotfiles, change that commit and run `updpkgsums`, which
 checksums git sources too.
 
-The repository key (`9CECC70BA1BC755E24211DADF89429CD92739788`, "LuminOS")
-expires on 2029-09-26. `luminos-keyring/PKGBUILD` says what to do before
+The repository key (`547F4761802A0904A0B10E5FAE527343BC3E39B3`, "LuminOS")
+expires on 2029-10-17. `luminos-keyring/PKGBUILD` says what to do before
 then.
 
 `luminos-dawn` builds Rust binaries, so its build machine needs Rust, git,
