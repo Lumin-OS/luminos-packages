@@ -16,7 +16,7 @@ depends=(
 makedepends=(rust git)
 backup=('etc/dawn/installer.toml')
 options=('!lto')
-_commit=6df4c5b7251632f61d7e81e8f5eb991e6dedbc42
+_commit=7a8d4bdd14382cd234bed6c55b6596c0ed143cc3
 source=("dawn::git+https://github.com/Lumin-OS/dawn.git#commit=$_commit" luminos-dawn.desktop)
 sha256sums=('SKIP' 'ab5c2af804fa7009c07e9cf7067ea7f58dc19cb19136b68964df613051de5917')
 
